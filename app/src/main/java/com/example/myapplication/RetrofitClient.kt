@@ -25,22 +25,28 @@ object RetrofitClient {
 class ExampleServiceImpl : ExampleService {
     override fun loginUser(login: String, password: String): String {
 
+/*
         TODO("Check if it is in datastore if no then create random data and random key to it")
+*/
         val accountId = login + login.hashCode().toString()
         val list = mutableListOf<Payment>()
         for (i in 0..3){
-            list.add(Payment(accountId,RetrofitClient.possibleProducts[Random.nextInt()],RetrofitClient.possiblePaymentType[Random.nextInt()],Random.nextFloat(),RetrofitClient.possibleCurrency[Random.nextInt()]))
+            list.add(Payment(accountId,RetrofitClient.possibleProducts[Random.nextInt(5)],RetrofitClient.possiblePaymentType[Random.nextInt(4)],Random.nextFloat(),RetrofitClient.possibleCurrency[Random.nextInt(3)]))
         }
+/*
         TODO("Save in datastore")
+*/
         return accountId
     }
 
     override fun getRandomInfo(accountId: String): List<Payment> {
         val list = mutableListOf<Payment>()
         for (i in 0..3){
-            list.add(Payment(accountId,RetrofitClient.possibleProducts[Random.nextInt()],RetrofitClient.possiblePaymentType[Random.nextInt()],Random.nextFloat(),RetrofitClient.possibleCurrency[Random.nextInt()]))
+            list.add(Payment(accountId,RetrofitClient.possibleProducts[Random.nextInt(5)],RetrofitClient.possiblePaymentType[Random.nextInt(3)],Random.nextFloat(),RetrofitClient.possibleCurrency[Random.nextInt(3)]))
         }
+/*
         TODO("Check if there is ")
+*/
         return list.toList()
     }
 }

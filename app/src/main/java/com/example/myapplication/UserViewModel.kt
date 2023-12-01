@@ -1,9 +1,12 @@
 package com.example.myapplication
 
 import android.util.Log
+import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class UserViewModel(val repo: UserRepository): ViewModel() {
@@ -12,6 +15,9 @@ class UserViewModel(val repo: UserRepository): ViewModel() {
     val loginRequest = LoginRequest("demo", "12345")
     val gasError = mutableStateOf(Boolean)
     val errorText = mutableStateOf("")
+    val shouldNavigateToMainScreen = mutableStateOf(false)
+
+    val value: State<Boolean> = shouldNavigateToMainScreen
 
 
     val login = mutableStateOf("")
@@ -23,8 +29,10 @@ class UserViewModel(val repo: UserRepository): ViewModel() {
     fun confirmAuth() {
         viewModelScope.launch {
             repo.userToken = RetrofitClient.exampleService.loginUser(login.value,password.value)
-            repo.list = RetrofitClient.exampleService.getRandomInfo(repo.userToken)
-        
+            repo.list.value = RetrofitClient.exampleService.getRandomInfo(repo.userToken)
+            delay(3000L)
+            shouldNavigateToMainScreen.value = true
+
 /*            val loginResponse = RetrofitClient.easyPayService.login(RetrofitClient.API_KEY,1, loginRequest)
 
             // Assuming you have obtained a token from the login response

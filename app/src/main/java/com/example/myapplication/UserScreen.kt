@@ -23,6 +23,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -47,10 +48,11 @@ import androidx.navigation.NavController
 
 @Composable
 fun UserScreen(navController: NavController, userViewModel: UserViewModel){
+    val shouldNavigate by userViewModel.shouldNavigateToMainScreen
     var isInitialized by remember {
         userViewModel.isUserInitialized
     }
-    var gasError by remember {
+    var hasError = remember {
         userViewModel.gasError
     }
     var isLoginScreen = remember {
@@ -59,6 +61,7 @@ fun UserScreen(navController: NavController, userViewModel: UserViewModel){
     var error by remember {
         userViewModel.errorText
     }
+
     Column(modifier = Modifier
         .fillMaxWidth()
         .padding(horizontal = 24.dp)
@@ -80,9 +83,14 @@ fun UserScreen(navController: NavController, userViewModel: UserViewModel){
                 ConfirmButton {
 
                     userViewModel.confirmAuth()
-
+                    Log.d("User","sss")
+                    if (shouldNavigate) {
+                        Log.d("User","sss")
+                        navController.navigate(Screen.MainScreen.route) {
+                            popUpTo(Screen.UserScreen.route) { inclusive = true }
+                        }
+                    }
                 }
-                SearchOrLoginLine(isLoginScreen)
                 if(false){
                     Text("$error", color = Color.Red)
                 }
@@ -105,28 +113,7 @@ fun ConfirmButton(confirmAuth: () -> Unit) {
             .align(Alignment.Center), textAlign = TextAlign.Center)
     }
 }
-@Composable
-fun SearchOrLoginLine(isLoginScreen: MutableState<Boolean>){
-    Row(
-        Modifier
-            .padding(top = 12.dp)
-            .width(256.dp), horizontalArrangement = Arrangement.SpaceAround){
-
-        Box(modifier = Modifier
-            .clip(RoundedCornerShape(10.dp))
-            .clickable { isLoginScreen.value = false }){
-
-            Text("Log in", fontSize = 16.sp, modifier = Modifier, textAlign = TextAlign.Center)
-        }
-        Box(modifier = Modifier
-            .padding(end = 4.dp, start = 4.dp)
-            .clip(CircleShape)
-            .clickable { isLoginScreen.value = true }){
-
-            Text("Create account", fontSize = 16.sp, modifier = Modifier, textAlign = TextAlign.Center)
-        }
-    }
-}@OptIn(ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun EditTextLine(
     modifier: Modifier = Modifier,

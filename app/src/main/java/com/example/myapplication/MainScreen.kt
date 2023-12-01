@@ -14,10 +14,11 @@ import androidx.navigation.NavController
 
 @Composable
 fun MainScreen(navController: NavController, mainViewModel: MainViewModel){
+    val list = mainViewModel.list
     Column(){
 
         TopMainBar()
-        PaymentsList(list = mainViewModel)
+        PaymentsList(list = mainViewModel.list)
     }
 }
 @Composable
@@ -36,8 +37,8 @@ fun PaymentsList(list: List<Payment>){
                 Text(text = "date")
             }
         }
-        item(list.size){
-            PaymentItem(list[it])
+        items(list.size){
+            PaymentItem(payment = list[it])
         }
     }
 }
