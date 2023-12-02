@@ -82,16 +82,15 @@ fun UserScreen(navController: NavController, userViewModel: UserViewModel){
             Column(verticalArrangement = Arrangement.spacedBy(8.dp),horizontalAlignment = Alignment.CenterHorizontally,){
                 ConfirmButton {
 
-                    userViewModel.confirmAuth()
-                    Log.d("User","sss")
-                    if (shouldNavigate) {
-                        Log.d("User","sss")
+                    userViewModel.confirmAuth {
+
                         navController.navigate(Screen.MainScreen.route) {
                             popUpTo(Screen.UserScreen.route) { inclusive = true }
                         }
                     }
+                    Log.d("User","sss")
                 }
-                if(false){
+                if(hasError.value){
                     Text("$error", color = Color.Red)
                 }
             }
