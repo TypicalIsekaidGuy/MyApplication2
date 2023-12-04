@@ -23,6 +23,7 @@ object RetrofitClient {
 }
 
 class ExampleServiceImpl : ExampleService {
+    val dataStoreImplementation = DataStoreImplementation()
     override fun loginUser(login: String, password: String): String {
 
 /*
